@@ -81,7 +81,7 @@
                 android:text="No account yet? Create one"
                 android:gravity="center"
                 android:textSize="16dp"
-                android:textColor="blue"/>
+                android:textColor="@color/link_blue"/>
 
         </LinearLayout>
     </ScrollView>

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "230745751419",
+    "firebase_url": "https://photoapplication-25b4c.firebaseio.com",
+    "project_id": "photoapplication-25b4c",
+    "storage_bucket": "photoapplication-25b4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230745751419:android:9e5256ea6729d853",
+        "android_client_info": {
+          "package_name": "com.example.misaka.photoapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "230745751419-cjft4a9b4i4ee6rhge8domc690d4ftep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxUEBnLXDcXEsF_BR3xKW-eArk2TC0Wrk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

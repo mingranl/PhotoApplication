@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Search.SearchUserActivity"
-    tools:layout_editor_absoluteY="81dp">
+    android:background="@color/white">
 
-    <SearchView
-        android:id="@+id/searchUbar"
-        android:layout_width="367dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginStart="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    </SearchView>
+        <SearchView
+            android:id="@+id/searchUbar"
+            android:layout_width="367dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <ListView
-        android:id="@+id/searchUList"
-        android:layout_width="368dp"
-        android:layout_height="455dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchUbar" />
+        </SearchView>
 
-</android.support.constraint.ConstraintLayout>
+        <ListView
+            android:id="@+id/searchUList"
+            android:layout_width="368dp"
+            android:layout_height="455dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/searchUbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchUbar" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/tool_bottom_navigation"/>
+
+</RelativeLayout>

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +20,7 @@ import android.widget.SearchView;
 import com.example.misaka.photoapplication.Model.User;
 import com.example.misaka.photoapplication.Profile.ProfileActivity;
 import com.example.misaka.photoapplication.R;
+import com.example.misaka.photoapplication.Util.NavigationBarActivate;
 import com.example.misaka.photoapplication.Util.ResultUserAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +38,9 @@ public class SearchUserActivity extends AppCompatActivity {
 
     //used for log output
     private static final String TAG="SearchUserActivity";
+
+    //bottom navi bar label
+    private static final int SWITCH_LABEL = 1;
 
     //activity context
     private Context context=SearchUserActivity.this;
@@ -58,6 +65,7 @@ public class SearchUserActivity extends AppCompatActivity {
         mSearchView=findViewById(R.id.searchUbar);
         mListView=findViewById(R.id.searchUList);
 
+        setupBottomNavigationView();
         searchTextListener();
     }
 
@@ -122,5 +130,20 @@ public class SearchUserActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    /**
+     * BottomNavigationView
+     */
+    private void setupBottomNavigationView(){
+        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNaviBar);
+        Log.d(TAG, "setupBottomNavigationView: Setting up BottomNavigationView");
+        bottomNavigationViewEx.enableAnimation(false);
+        bottomNavigationViewEx.setTextVisibility(false);
+        NavigationBarActivate.activateNavi(context, this, bottomNavigationViewEx);
+        Menu menu = bottomNavigationViewEx.getMenu();
+        MenuItem menuItem = menu.getItem(SWITCH_LABEL);
+        menuItem.setChecked(true);
     }
 }

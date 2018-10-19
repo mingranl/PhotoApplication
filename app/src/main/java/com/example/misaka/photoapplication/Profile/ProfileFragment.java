@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.example.misaka.photoapplication.R;
 
 public class ProfileFragment extends Fragment {
+    private static final String TAG = "ProfileFragment";
 
     public ProfileFragment() {
         // Required empty public constructor

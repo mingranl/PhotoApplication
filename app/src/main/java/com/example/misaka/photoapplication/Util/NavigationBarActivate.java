@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.example.misaka.photoapplication.Home.HomeActivity;
 import com.example.misaka.photoapplication.Profile.ProfileActivity;
+import com.example.misaka.photoapplication.Share.ShareActivity;
 import com.example.misaka.photoapplication.R;
 import com.example.misaka.photoapplication.Search.SearchUserActivity;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -38,11 +39,12 @@ public class NavigationBarActivate {
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
 
-//                    case R.id.nb_share:
-//                        Intent intent3 = new Intent(context, ShareActivity.class);//SWITCH_LABEL = 2
-//                        context.startActivity(intent3);
-////                        callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-//                        break;
+                    case R.id.nb_share:
+                        Intent intent3 = new Intent(context, ShareActivity.class);//SWITCH_LABEL = 2
+                        intent3.putExtra("caller",context.getClass().toString());
+                        context.startActivity(intent3);
+//                        callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        break;
 //
 //                    case R.id.nb_notification:
 //                        Intent intent4 = new Intent(context, LikesActivity.class);//SWITCH_LABEL = 3

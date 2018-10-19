@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nb_moments"
+        android:icon="@mipmap/nb_moments"
+        android:title="">
+    </item>
+
+
+    <item
+        android:id="@+id/nb_search"
+        android:icon="@mipmap/nb_search"
+        android:title="">
+    </item>
+
+    <item
+        android:id="@+id/nb_share"
+        android:icon="@mipmap/nb_share"
+        android:title="">
+    </item>
+
+    <item
+        android:id="@+id/nb_notification"
+        android:icon="@mipmap/nb_notification"
+        android:title="">
+    </item>
+
+    <item
+        android:id="@+id/nb_profile"
+        android:icon="@mipmap/nb_profile"
+        android:title="">
+    </item>
+</menu>

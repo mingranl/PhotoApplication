@@ -26,7 +26,6 @@ import com.example.misaka.photoapplication.Home.HomeActivity;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
-    private static final Boolean CHECK_IF_VERIFIED = false;
 
     //firebase
     private FirebaseAuth mAuth;
@@ -37,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEmail, mPassword;
     private TextView linkSignUp;
     private Button btnLogin;
-//    private View mLoginFormView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // view
         mProgressBar = (ProgressBar) findViewById(R.id.login_progress);
-//        mLoginFormView = (View) findViewById(R.id.login_form);
         mEmail = (EditText) findViewById(R.id.email);
         mPassword = (EditText) findViewById(R.id.password);
         linkSignUp = (TextView) findViewById(R.id.link_register);

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/ufItem_container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/feed_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/feed_img"
+            android:text="username" />
+
+        <ImageView
+            android:id="@+id/feed_img"
+            android:layout_width="228dp"
+            android:layout_height="126dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+        <TextView
+            android:id="@+id/feed_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/feed_img"
+            android:layout_marginBottom="123dp"
+            android:text="Description" />
+
+        <ImageButton
+            android:id="@+id/feed_comment"
+            android:layout_width="23dp"
+            android:layout_height="19dp"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/feed_description"
+            android:layout_marginEnd="109dp"
+            android:layout_marginTop="-123dp"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/feed_like"
+            android:layout_width="22dp"
+            android:layout_height="19dp"
+            android:layout_alignEnd="@+id/feed_img"
+            android:layout_below="@+id/feed_description"
+            android:layout_marginTop="-123dp"
+            app:srcCompat="@android:drawable/star_big_off" />
+
+        <ListView
+            android:id="@+id/users_comment"
+            android:layout_width="358dp"
+            android:layout_height="72dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="14dp"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="219dp" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

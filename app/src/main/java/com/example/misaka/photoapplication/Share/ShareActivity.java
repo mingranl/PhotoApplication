@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,14 @@ import com.example.misaka.photoapplication.Profile.ProfileActivity;
 import com.example.misaka.photoapplication.R;
 import com.example.misaka.photoapplication.Search.SearchUserActivity;
 import com.example.misaka.photoapplication.Util.NavigationBarActivate;
+
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.SpanUtils;
+
+import java.util.List;
 
 public class ShareActivity extends AppCompatActivity {
 
@@ -45,16 +54,16 @@ public class ShareActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_share);
-//        Log.d(TAG, "onCreate: started.");
+        setContentView(R.layout.activity_share);
+        Log.d(TAG, "onCreate: started.");
 
         if(checkPermissions(PERMISSIONS)){
-//            setupViewPager();
+            setupViewPager();
             Log.d(TAG, "checkPermissions: Succeed.");
         }else{
             Log.d(TAG, "checkPermissions: Failed.");
             verifyPermissions(PERMISSIONS);
-//            afterVerification();
+            afterVerification();
         }
     }
 
@@ -62,9 +71,28 @@ public class ShareActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         if(checkPermissions(PERMISSIONS)){
-//            setupViewPager();
+            setupViewPager();
             Log.d(TAG, "onStart: Start.");
         }
+    }
+
+    /**
+     * setup viewpager for manager the tabs
+     */
+    private void setupViewPager(){
+//        SectionPageAdapter adapter =  new SectionPageAdapter(getSupportFragmentManager());
+//        adapter.addFragment(new GalleryFragment());
+//        adapter.addFragment(new PhotoFragment());
+//
+//        mViewPager = (ViewPager) findViewById(R.id.viewpager_container);
+//        mViewPager.setAdapter(adapter);
+//
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabsBottom);
+//        tabLayout.setupWithViewPager(mViewPager);
+//
+//        tabLayout.getTabAt(0).setText(getString(R.string.gallery));
+//        tabLayout.getTabAt(1).setText(getString(R.string.photo));
+
     }
 
     /**

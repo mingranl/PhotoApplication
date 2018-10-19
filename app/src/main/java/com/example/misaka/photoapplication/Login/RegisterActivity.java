@@ -176,7 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     // write new user to users
     private void writeNewUser(String userId, String name, String email) {
-        User user = new User(userId, name, email);
+        User user = new User(userId, email, name);
 
         myRef.child("users").child(userId).setValue(user);
     }

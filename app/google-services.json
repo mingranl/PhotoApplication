@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "230745751419-it2ct363kd1hd4a2bi8so365od19hmgs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.misaka.photoapplication",
+            "certificate_hash": "45ac491553e98ae5442b505e9588ee64934059c7"
+          }
+        },
+        {
           "client_id": "230745751419-cjft4a9b4i4ee6rhge8domc690d4ftep.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230745751419-cjft4a9b4i4ee6rhge8domc690d4ftep.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

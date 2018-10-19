@@ -42,6 +42,11 @@
             android:launchMode="singleInstance">
 
         </activity>
+        <activity
+            android:name=".Share.ShareActivity"
+            android:launchMode="singleInstance">
+
+        </activity>
     </application>
 
 </manifest>

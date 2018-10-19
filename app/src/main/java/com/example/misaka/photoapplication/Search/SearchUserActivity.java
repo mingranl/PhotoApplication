@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -56,9 +57,13 @@ public class SearchUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_user);
         mSearchView=findViewById(R.id.searchUbar);
         mListView=findViewById(R.id.searchUList);
+
+        searchTextListener();
     }
 
     private void searchTextListener(){
+        Log.d(TAG, "initQueryListener: initializing");
+
         resultUsers =new ArrayList<User>();
 
         //set query text listener
@@ -81,6 +86,8 @@ public class SearchUserActivity extends AppCompatActivity {
     }
 
     public void searchUsers(String username){
+        Log.d(TAG, "searchForMatch: searching for a match: " + username);
+
         //clear result List
         resultUsers.clear();
 
@@ -91,6 +98,8 @@ public class SearchUserActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot singleUser: dataSnapshot.getChildren()){
+                        Log.d(TAG, "onDataChange: found user:" + singleUser.getValue(User.class).toString());
+
                         resultUsers.add(singleUser.getValue(User.class));
                         //render the user list with adapter
                         mListView.setAdapter(new ResultUserAdapter(SearchUserActivity.this,R.layout.layout_user_item,resultUsers));
@@ -100,7 +109,7 @@ public class SearchUserActivity extends AppCompatActivity {
                             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                                 // jump to user profile
                                 Intent intent =new Intent(SearchUserActivity.this, ProfileActivity.class);
-                                intent.putExtra("user", (Parcelable) resultUsers.get(position));
+                                intent.putExtra("user", resultUsers.get(position));
                                 startActivity(intent);
                             }
                         });

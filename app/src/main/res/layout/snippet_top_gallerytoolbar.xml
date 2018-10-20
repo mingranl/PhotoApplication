@@ -25,35 +25,6 @@
                     android:id="@+id/ivCloseShare"
                     android:src="@mipmap/share_x"/>
 
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/ivCloseShare"
-                    android:id="@+id/spinnerDirectory"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:text="Gallery"
-                    android:layout_centerVertical="true"
-                    android:gravity="center_vertical">
-
-
-                </Spinner>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/string_next"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
-                    android:textSize="20sp"
-                    android:textColor="@color/link_blue"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/tvNext"
-                    />
-
-
-
-
             </RelativeLayout>
 
 

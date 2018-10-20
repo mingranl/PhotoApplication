@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.net.Uri;
 
 import com.example.misaka.photoapplication.Home.HomeActivity;
 import com.example.misaka.photoapplication.Model.User;
@@ -41,10 +42,14 @@ import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+import java.io.File;
 
 public class ProcessActivity extends AppCompatActivity {
 
     private static final String TAG = "ProcessActivity";
+
+    private final int FILE_URI = 1;
+    private final int FILE_BITMAP = 2;
 
     //view
     private Button post;
@@ -54,11 +59,13 @@ public class ProcessActivity extends AppCompatActivity {
     private String mAppend = "file:/";
     private int imageCount = 0;
     private String imgUrl;
+    private Uri uri;
     private Bitmap photo;
     private Intent intent;
     private double mPhotoUploadProgress = 0;
     private String context;
     private Context mContext;
+    private int file_type = -1;
 
     //firebase
     private FirebaseAuth mAuth;
@@ -94,7 +101,14 @@ public class ProcessActivity extends AppCompatActivity {
 
         intent = getIntent();
         context = intent.getStringExtra("context");
-        photo = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
+        if(intent.hasExtra(getString(R.string.selected_image))){
+            uri = (Uri) intent.getParcelableExtra(getString(R.string.selected_image));
+            file_type = FILE_URI;
+        }
+        if(intent.hasExtra(getString(R.string.selected_bitmap))){
+            photo = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            file_type = FILE_BITMAP;
+        }
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,38 +125,76 @@ public class ProcessActivity extends AppCompatActivity {
     public void uploadNewPhoto(){
         Log.d(TAG, "uploadNewPhoto: attempting to uplaod new photo.");
 
-        // Get the data from an ImageView as bytes
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
+        if(file_type == FILE_BITMAP){
+            // Get the data from an ImageView as bytes
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
 
-        UploadTask uploadTask = imgs.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                Log.d(TAG, "onFailure: Photo upload failed.");
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-                Toast.makeText(mContext, "photo upload success", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-
-                if(progress - 15 > mPhotoUploadProgress){
-                    Toast.makeText(ProcessActivity.this, "photo upload progress: " + String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
-                    mPhotoUploadProgress = progress;
+            UploadTask uploadTask = imgs.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                    Log.d(TAG, "onFailure: Photo upload failed.");
+                    Toast.makeText(mContext, "Photo upload failed.", Toast.LENGTH_SHORT).show();
                 }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                    // ...
+                    Log.d(TAG, "onFailure: Photo upload succeed.");
+                    Toast.makeText(mContext, "Photo upload succeed.", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
-            }
-        });;
+                    if(progress - 15 > mPhotoUploadProgress){
+                        Toast.makeText(ProcessActivity.this, "photo upload progress: " + String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                        mPhotoUploadProgress = progress;
+                    }
+
+                    Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
+                }
+            });
+        }
+        if(file_type == FILE_URI){
+            Log.d(TAG, "uri: " + uri);
+            UploadTask uploadTask = imgs.putFile(uri);
+
+            // Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                    Log.d(TAG, "onFailure: Photo upload failed.");
+                    Toast.makeText(mContext, "Photo upload failed.", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                    // ...
+                    Log.d(TAG, "onFailure: Photo upload succeed.");
+                    Toast.makeText(mContext, "Photo upload succeed", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                    if(progress - 15 > mPhotoUploadProgress){
+                        Toast.makeText(ProcessActivity.this, "photo upload progress: " + String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                        mPhotoUploadProgress = progress;
+                    }
+
+                    Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
+                }
+            });
+        }
     }
 
     private void writeToDatabase(String description,String imagePath,String username){

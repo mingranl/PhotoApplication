@@ -3,6 +3,7 @@ package com.example.misaka.photoapplication.Share;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,6 +26,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,10 +38,15 @@ public class CameraFragment extends Fragment {
 
     //constant
     private static final int PHOTO_FRAGMENT_NUM = 0;
+    private static final int  GALLERY_REQUEST_CODE = 21;
     private static final int  CAMERA_REQUEST_CODE = 22;
 
-    //open camera btn
+    //var
     private Button btnOpenCamera;
+    private Button btnFileChoose;
+    private ImageView cancel;
+
+
     //storage path for the photo
     private String mTempPhotoPath;
     //image's uri path
@@ -62,6 +69,23 @@ public class CameraFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
+        cancel = (ImageView)view.findViewById(R.id.ivCloseShare);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: closing the gallery fragment.");
+                getActivity().finish();
+            }
+        });
+        btnFileChoose = (Button) view.findViewById(R.id.file_choose);
+        btnFileChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: open gallery.");
+
+                choosePhoto();
+            }
+        });
         btnOpenCamera = (Button) view.findViewById(R.id.open_camera);
         btnOpenCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +141,13 @@ public class CameraFragment extends Fragment {
         }
     }
 
+    private void choosePhoto(){
+        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+        // add postfix to "image/" to limit upload image type
+        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intentToPickPic, GALLERY_REQUEST_CODE);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -136,6 +167,27 @@ public class CameraFragment extends Fragment {
 //                getActivity().finish();
             }catch (NullPointerException e){
                 Log.d(TAG, "onActivityResult: NullPointerException: " + e.getMessage());
+            }
+        }
+        if(requestCode == GALLERY_REQUEST_CODE){
+            try {
+                Log.d(TAG,"GALLERY_REQUEST_CODE"+GALLERY_REQUEST_CODE);
+//                Uri selectedImageUri = data.getData();
+                if(data!=null) {
+                    Uri selectedImageUri = data.getData();
+                    String filestring = selectedImageUri.getPath();
+//                    Bitmap bitmap = BitmapFactory.decodeFile(filestring);
+//                    Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(selectedImageUri));
+
+//                    Log.d(TAG,"selectedImageUri:"+selectedImageUri);
+//                    Log.d(TAG,"filestring:"+filestring);
+                    Intent intent = new Intent(getActivity(), ProcessActivity.class);
+                    intent.putExtra(getString(R.string.selected_image), selectedImageUri);
+                    intent.putExtra("context", getActivity().getIntent().getStringExtra("caller"));
+                    startActivity(intent);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

@@ -117,7 +117,10 @@ public class SearchUserActivity extends AppCompatActivity {
                             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                                 // jump to user profile
                                 Intent intent =new Intent(SearchUserActivity.this, ProfileActivity.class);
-                                intent.putExtra("user", resultUsers.get(position));
+                                Bundle bundle=new Bundle();
+                                intent.putExtra("calledFromSearch","calling");
+                                bundle.putSerializable("intent_user", resultUsers.get(position));
+                                intent.putExtras(bundle);
                                 startActivity(intent);
                             }
                         });

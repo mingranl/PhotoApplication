@@ -74,13 +74,6 @@ public class ProfileFragment extends Fragment {
         // call method to get AccountInfo from firebase
         getAccountInfo();
 
-//        userName.setText(String.valueOf(accList.get(0).getUsername()));
-//        infoName.setText(String.valueOf(accList.get(0).getUsername()));
-//        accPosts.setText(String.valueOf(accList.get(0).getPosts()));
-//        accFollowers.setText(String.valueOf(accList.get(0).getFollowers()));
-//        accFollowing.setText(String.valueOf(accList.get(0).getFollowing()));
-
-
         // log out
         Button logOut = (Button) view.findViewById(R.id.logout_btn);
         logOut.setOnClickListener(new View.OnClickListener() {

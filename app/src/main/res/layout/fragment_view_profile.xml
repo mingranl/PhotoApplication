@@ -14,23 +14,15 @@
             android:layout_marginTop="10dp">
 
             <TextView
+                android:id="@+id/profileViewUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome, " />
-
-            <TextView
-                android:id="@+id/profileUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="73dp"
                 android:text="Null" />
 
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/profile_state_layout"
+            android:id="@+id/profile_view_state_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -47,7 +39,7 @@
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_marginTop="5dp"
-                    android:id="@+id/userProfilePhoto"/>
+                    android:id="@+id/userViewProfilePhoto"/>
 
             </RelativeLayout>
 
@@ -58,23 +50,23 @@
                 android:layout_marginLeft="30dp"
                 android:layout_weight="75">
 
-                <include layout="@layout/profile_user_states"/>
+                <include layout="@layout/profile_view_user_states"/>
 
             </RelativeLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/profile_middle_info_layout"
+            android:id="@+id/profile_view_middle_info_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_state_layout"
+            android:layout_below="@+id/profile_view_state_layout"
             android:orientation="vertical"
             android:padding="20dp"
             android:background="@color/white">
 
             <TextView
-                android:id="@+id/display_name"
+                android:id="@+id/display_view_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="NULL"
@@ -83,7 +75,7 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/description"
+                android:id="@+id/view_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -92,7 +84,7 @@
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/display_email"
+                android:id="@+id/display_view_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -106,12 +98,12 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_middle_info_layout"
+            android:layout_below="@+id/profile_view_middle_info_layout"
             android:layout_marginBottom="50dp"
             >
 
             <GridView
-                android:id="@+id/gridView"
+                android:id="@+id/gridViewView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

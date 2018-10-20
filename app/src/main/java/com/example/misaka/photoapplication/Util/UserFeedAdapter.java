@@ -38,7 +38,7 @@ public class UserFeedAdapter extends ArrayAdapter<FeedItem>{
     private int layoutResource=-1;
     private LayoutInflater mInflater=null;
     private ArrayList<FeedItem> feedlist=null;
-    private ArrayList<Comment> commentlist=null;
+    private ArrayList<Comment> commentlist=new ArrayList<Comment>();;
     private ArrayList<Like> likelist=null;
     private ViewHolder holder=null;
     boolean loginUserLike=false;
@@ -53,7 +53,8 @@ public class UserFeedAdapter extends ArrayAdapter<FeedItem>{
         super(context, resource, objects);
         mcontext=context;
         layoutResource=resource;
-        mInflater=LayoutInflater.from(mcontext);
+        mInflater=(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                //LayoutInflater.from(mcontext);
         feedlist= (ArrayList<FeedItem>) objects;
     }
 
@@ -70,7 +71,6 @@ public class UserFeedAdapter extends ArrayAdapter<FeedItem>{
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        commentlist=new ArrayList<Comment>();
 
         if(convertView==null){
             convertView=mInflater.inflate(layoutResource, parent, false);
@@ -109,9 +109,9 @@ public class UserFeedAdapter extends ArrayAdapter<FeedItem>{
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                commentlist.clear();
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     commentlist.add(ds.getValue(Comment.class));
-                    holder.users_comment.setAdapter(new CommentAdapter(mcontext, R.layout.layout_comment_item,commentlist));
                 }
             }
 
@@ -120,6 +120,7 @@ public class UserFeedAdapter extends ArrayAdapter<FeedItem>{
 
             }
         });
+        holder.users_comment.setAdapter(new CommentAdapter(mcontext, R.layout.layout_comment_item,commentlist));
 
         //set like button listener
         Log.d("feed_like", "loginUserLike" + loginUserLike);
@@ -130,40 +131,40 @@ public class UserFeedAdapter extends ArrayAdapter<FeedItem>{
 
 
 
-//        holder.feed_like.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(loginUserLike==false){
-//                    holder.feed_like.setImageResource(android.R.drawable.star_big_on);
-//                    loginUserLike=true;
-//                }else{
-//                    holder.feed_like.setImageResource(android.R.drawable.star_big_off);
-//                    loginUserLike=false;
-//                }
-//            }
-//        });
+        holder.feed_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(loginUserLike==false){
+                    holder.feed_like.setImageResource(android.R.drawable.star_big_on);
+                    loginUserLike=true;
+                }else{
+                    holder.feed_like.setImageResource(android.R.drawable.star_big_off);
+                    loginUserLike=false;
+                }
+            }
+        });
 
 
         return convertView;
     }
 
-    class ImageButtonOnclick implements View.OnClickListener{
-
-        private int position;
-
-        public ImageButtonOnclick(int position) {
-            this.position = position;
-        }
-
-        @Override
-        public void onClick(View view) {
-            if(loginUserLike==false){
-                holder.feed_like.setImageResource(android.R.drawable.star_big_on);
-                loginUserLike=true;
-            }else{
-                holder.feed_like.setImageResource(android.R.drawable.star_big_off);
-                loginUserLike=false;
-            }
-        }
-    }
+//    class ImageButtonOnclick implements View.OnClickListener{
+//
+//        private int position;
+//
+//        public ImageButtonOnclick(int position) {
+//            this.position = position;
+//        }
+//
+//        @Override
+//        public void onClick(View view) {
+//            if(loginUserLike==false){
+//                holder.feed_like.setImageResource(android.R.drawable.star_big_on);
+//                loginUserLike=true;
+//            }else{
+//                holder.feed_like.setImageResource(android.R.drawable.star_big_off);
+//                loginUserLike=false;
+//            }
+//        }
+//    }
 }

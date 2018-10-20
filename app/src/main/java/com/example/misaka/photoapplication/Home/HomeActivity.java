@@ -81,8 +81,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting.");
-        mTextView =(TextView) findViewById(R.id.userfeed_title);
-        mListView =(ListView) findViewById(R.id.userfeed_list);
+        mTextView =(TextView) findViewById(R.id.feed_title);
+        mListView =(ListView) findViewById(R.id.feed_list);
 
         mAuth = FirebaseAuth.getInstance();
 

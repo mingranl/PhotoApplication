@@ -64,7 +64,6 @@
             android:layout_height="72dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="14dp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="219dp" />
 
@@ -81,8 +80,9 @@
             android:id="@+id/textView2"
             android:layout_width="88dp"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/users_comment"
-            android:layout_alignStart="@+id/textView"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/users_comment"
+            android:layout_marginBottom="85dp"
             android:text="#comments#" />
 
     </RelativeLayout>

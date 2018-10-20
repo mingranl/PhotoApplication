@@ -11,14 +11,14 @@ import java.util.List;
 /**
  * Class that stores fragments for tabs
  */
-public class SectionPageAdapter extends FragmentPagerAdapter {
+public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private static final String TAG = "SectionsPagerAdapter";
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
 
 
-    public SectionPageAdapter(FragmentManager fm) {
+    public SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 

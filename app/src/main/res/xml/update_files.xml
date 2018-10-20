@@ -1,0 +1,9 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <paths>
+        <files-path path="PhotoApplication/" name="files" />
+        <cache-path path="PhotoApplication/" name="cache" />
+        <external-path path="PhotoApplication/" name="external" />
+        <external-files-path path="PhotoApplication/" name="externalfiles"/>
+        <external-cache-path  path="PhotoApplication/" name="externalcache"/>
+    </paths>
+</resources>

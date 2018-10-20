@@ -43,7 +43,7 @@ public class NavigationBarActivate {
                         Intent intent3 = new Intent(context, ShareActivity.class);//SWITCH_LABEL = 2
                         intent3.putExtra("caller",context.getClass().toString());
                         context.startActivity(intent3);
-//                        callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
 //
 //                    case R.id.nb_notification:

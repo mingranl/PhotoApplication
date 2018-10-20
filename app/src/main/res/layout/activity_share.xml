@@ -14,7 +14,7 @@
             android:id="@+id/share_content"
             android:layout_marginBottom="50dp">
 
-            <!--<include layout="@layout/layout_center_viewpager"/>-->
+            <include layout="@layout/layout_center_viewpager"/>
 
 
         </RelativeLayout>
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/share_switch_tab">
 
-            <!--<include layout="@layout/layout_bottom_tabs"/>-->
+            <include layout="@layout/layout_bottom_tabs"/>
 
 
         </RelativeLayout>

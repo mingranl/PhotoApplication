@@ -12,12 +12,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.misaka.photoapplication.Login.LoginActivity;
 import com.example.misaka.photoapplication.Model.AccountInfo;
 import com.example.misaka.photoapplication.R;
 import com.example.misaka.photoapplication.Util.NavigationBarActivate;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,6 +28,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
@@ -37,13 +42,17 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference myRef;
+
+    private static final DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
+    private static final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private static final StorageReference storageReference = firebaseStorage.getReference();
 
     //result users list
     private List<AccountInfo> accList = null;
 
     //widgets
-    private TextView accPosts, accFollowers, accFollowing, userName, infoName;
+    private TextView accPosts, accFollowers, accFollowing, userName, infoName, accDes, accEmail;
+    private ImageView accImg;
     private BottomNavigationViewEx bottomNavigationViewEx;
     private Context context;
 
@@ -59,12 +68,15 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        userName = (TextView) view.findViewById(R.id.profileUserName);
-        infoName = (TextView) view.findViewById(R.id.display_name);
-        accPosts = (TextView) view.findViewById(R.id.tvPosts);
-        accFollowers = (TextView) view.findViewById(R.id.tvFollowers);
-        accFollowing = (TextView) view.findViewById(R.id.tvFollowing);
-        bottomNavigationViewEx = (BottomNavigationViewEx) view.findViewById(R.id.bottomNaviBar);
+        userName = view.findViewById(R.id.profileUserName);
+        infoName = view.findViewById(R.id.display_name);
+        accPosts = view.findViewById(R.id.tvPosts);
+        accFollowers = view.findViewById(R.id.tvFollowers);
+        accFollowing = view.findViewById(R.id.tvFollowing);
+        accDes = view.findViewById(R.id.description);
+        accEmail = view.findViewById(R.id.display_email);
+        accImg = view.findViewById(R.id.userProfilePhoto);
+        bottomNavigationViewEx = view.findViewById(R.id.bottomNaviBar);
         context = getActivity();
         accList = new ArrayList<AccountInfo>();
 
@@ -91,8 +103,7 @@ public class ProfileFragment extends Fragment {
     //get account info
     private void getAccountInfo(){
         accList.clear();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        Query query = reference.child("account_info").orderByChild("user_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        Query query = dbReference.child("account_info").orderByChild("user_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -104,6 +115,15 @@ public class ProfileFragment extends Fragment {
                     accPosts.setText(String.valueOf(accList.get(0).getPosts()));
                     accFollowers.setText(String.valueOf(accList.get(0).getFollowers()));
                     accFollowing.setText(String.valueOf(accList.get(0).getFollowing()));
+                    accDes.setText(String.valueOf(accList.get(0).getDescription()));
+                    accEmail.setText(String.valueOf(accList.get(0).getEmail()));
+
+                    String imgPath = accList.get(0).getImg();
+                    StorageReference photoRef = storageReference.child(imgPath);
+                    Glide.with(context)
+                            .using(new FirebaseImageLoader())
+                            .load(photoRef)
+                            .into(accImg);
                 }
             }
             @Override

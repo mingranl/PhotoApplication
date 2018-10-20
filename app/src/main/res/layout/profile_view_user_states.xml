@@ -57,7 +57,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvViewFollowers"
             app:layout_constraintLeft_toRightOf="@+id/textViewPosts"
             android:layout_marginLeft="8dp"
-            app:layout_constraintRight_toLeftOf="@+id/textViewFollolwing"
+            app:layout_constraintRight_toLeftOf="@+id/textViewFollowing"
             android:layout_marginRight="8dp"
             app:layout_constraintHorizontal_bias="0.526"/>
 
@@ -74,7 +74,7 @@
             app:layout_constraintRight_toRightOf="parent"/>
 
         <TextView
-            android:id="@+id/textViewFollolwing"
+            android:id="@+id/textViewFollowing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Following"

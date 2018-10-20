@@ -16,13 +16,14 @@
             android:id="@+id/feed_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/feed_img"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="36dp"
             android:text="username" />
 
         <ImageView
             android:id="@+id/feed_img"
-            android:layout_width="228dp"
-            android:layout_height="126dp"
+            android:layout_width="274dp"
+            android:layout_height="135dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
@@ -30,11 +31,12 @@
 
         <TextView
             android:id="@+id/feed_description"
-            android:layout_width="wrap_content"
+            android:layout_width="202dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/feed_img"
-            android:layout_marginBottom="123dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="117dp"
+            android:layout_marginEnd="36dp"
             android:text="Description" />
 
         <ImageButton
@@ -43,28 +45,45 @@
             android:layout_height="19dp"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/feed_description"
-            android:layout_marginEnd="109dp"
-            android:layout_marginTop="-123dp"
+            android:layout_marginEnd="69dp"
+            android:layout_marginTop="-117dp"
             app:srcCompat="@android:drawable/ic_menu_edit" />
 
         <ImageButton
             android:id="@+id/feed_like"
             android:layout_width="22dp"
             android:layout_height="19dp"
-            android:layout_alignEnd="@+id/feed_img"
             android:layout_below="@+id/feed_description"
-            android:layout_marginTop="-123dp"
+            android:layout_marginTop="-117dp"
+            android:layout_toEndOf="@+id/feed_img"
             app:srcCompat="@android:drawable/star_big_off" />
 
         <ListView
             android:id="@+id/users_comment"
-            android:layout_width="358dp"
+            android:layout_width="327dp"
             android:layout_height="72dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="14dp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="219dp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/feed_description"
+            android:layout_marginStart="27dp"
+            android:text="#Description#" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="88dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/users_comment"
+            android:layout_alignStart="@+id/textView"
+            android:text="#comments#" />
 
     </RelativeLayout>
 

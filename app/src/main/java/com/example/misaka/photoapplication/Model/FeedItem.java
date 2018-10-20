@@ -7,12 +7,12 @@ public class FeedItem {
     private String description;
     private int like_count;
 
-    public FeedItem(String feed_id, String username, String img, String description, String like_count) {
+    public FeedItem(String feed_id, String username, String img, String description, int like_count) {
         this.feed_id = feed_id;
         this.username = username;
         this.img = img;
         this.description = description;
-        this.like_count = Integer.parseInt(like_count);
+        this.like_count = like_count;
     }
 
     public FeedItem() {
@@ -50,12 +50,12 @@ public class FeedItem {
         this.description = description;
     }
 
-    public String getLike_count() {
-        return String.valueOf(like_count);
+    public int getLike_count() {
+        return like_count;
     }
 
-    public void setLike_count(String like_count) {
-        this.like_count = Integer.parseInt(like_count);
+    public void setLike_count(int like_count) {
+        this.like_count = like_count;
     }
 
     @Override

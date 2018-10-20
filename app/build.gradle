@@ -32,6 +32,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.1'
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.google.firebase:firebase-storage:16.0.1'
+    implementation 'com.firebaseui:firebase-ui-storage:0.6.0'
     // bottom navigation lib provided by it-tianyu
     implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.2'
     implementation 'com.blankj:utilcode:1.21.0'

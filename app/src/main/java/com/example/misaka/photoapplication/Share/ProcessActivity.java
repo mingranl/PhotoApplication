@@ -10,9 +10,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.misaka.photoapplication.Home.HomeActivity;
+import com.example.misaka.photoapplication.Model.User;
 import com.example.misaka.photoapplication.Profile.ProfileActivity;
 import com.example.misaka.photoapplication.Search.SearchUserActivity;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,10 +40,15 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 public class ProcessActivity extends AppCompatActivity {
 
     private static final String TAG = "ProcessActivity";
+
+    //view
+    private Button post;
+    private EditText description;
 
     //vars
     private String mAppend = "file:/";
@@ -66,6 +75,9 @@ public class ProcessActivity extends AppCompatActivity {
         setContentView(R.layout.activity_process);
         Log.d(TAG, "onCreate: started.");
 
+        post = (Button) findViewById(R.id.post_photo);
+        description = (EditText) findViewById(R.id.description);
+
         mContext = ProcessActivity.this;
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -77,18 +89,23 @@ public class ProcessActivity extends AppCompatActivity {
         SimpleDateFormat format=new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
         Date date=new Date(currentTime);
         String filename=format.format(date);
-        String imagePath = "imgs/"+user.getUid() + "/Moments/"+filename+".jpg";
+        final String imagePath = "imgs/"+user.getUid() + "/Moments/"+filename+".jpg";
         imgs = mStorageReference.child(imagePath);
 
         intent = getIntent();
         context = intent.getStringExtra("context");
         photo = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
 
-        redirect(context);
-        Toast.makeText(ProcessActivity.this, "Attempting to upload new photo", Toast.LENGTH_SHORT).show();
-        uploadNewPhoto();
-
-
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String rDescription = description.getText().toString();
+                writeUserFeed(user.getUid(),imagePath,rDescription);
+                Toast.makeText(ProcessActivity.this, "Attempting to upload new photo", Toast.LENGTH_SHORT).show();
+                uploadNewPhoto();
+                redirect(context);
+            }
+        });
     }
 
     public void uploadNewPhoto(){
@@ -128,6 +145,15 @@ public class ProcessActivity extends AppCompatActivity {
         });;
     }
 
+    private void writeToDatabase(String description,String imagePath,String username){
+        String feed_id = UUID.randomUUID().toString();
+        myRef.child("userfeeds").child(feed_id).child("description").setValue(description);
+        myRef.child("userfeeds").child(feed_id).child("feed_id").setValue(feed_id);
+        myRef.child("userfeeds").child(feed_id).child("username").setValue(username);
+        myRef.child("userfeeds").child(feed_id).child("like_count").setValue(0);
+        myRef.child("userfeeds").child(feed_id).child("img").setValue(imagePath);
+    }
+
     private void redirect(String context){
         switch (context){
             case ShareActivity.HOME_ACTIVITY:
@@ -151,4 +177,37 @@ public class ProcessActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    /**
+     * Check is @param username already exists in teh database
+     * @param uuid
+     * @param imagePath
+     * @param description
+     */
+    private void writeUserFeed(final String uuid, final String imagePath, final String description) {
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference
+                .child("users")
+                .orderByChild("user_id")
+                .equalTo(uuid);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
+                    if (singleSnapshot.exists()){
+                        String userName = singleSnapshot.getValue(User.class).getUsername();
+                        writeToDatabase(description,imagePath,userName);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }

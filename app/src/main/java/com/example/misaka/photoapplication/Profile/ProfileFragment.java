@@ -2,8 +2,8 @@ package com.example.misaka.photoapplication.Profile;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.misaka.photoapplication.Login.LoginActivity;
+import com.example.misaka.photoapplication.Model.AccountInfo;
 import com.example.misaka.photoapplication.R;
 import com.example.misaka.photoapplication.Util.NavigationBarActivate;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +27,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
 
@@ -35,15 +39,13 @@ public class ProfileFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
 
+    //result users list
+    private List<AccountInfo> accList = null;
+
     //widgets
     private TextView accPosts, accFollowers, accFollowing, userName, infoName;
     private BottomNavigationViewEx bottomNavigationViewEx;
     private Context context;
-
-    //vars
-    private int accPostsNum = 0;
-    private int accFollowersNum = 0;
-    private int accFollowingNum = 0;
 
     //bottom navi bar label
     private static final int SWITCH_LABEL = 4;
@@ -64,12 +66,20 @@ public class ProfileFragment extends Fragment {
         accFollowing = (TextView) view.findViewById(R.id.tvFollowing);
         bottomNavigationViewEx = (BottomNavigationViewEx) view.findViewById(R.id.bottomNaviBar);
         context = getActivity();
+        accList = new ArrayList<AccountInfo>();
 
+        // call method to setup BottomNavigationBar
         setupBottomNavigationView();
 
-//        getFollowersCount();
-//        getFollowingCount();
-//        getPostsCount();
+        // call method to get AccountInfo from firebase
+        getAccountInfo();
+
+//        userName.setText(String.valueOf(accList.get(0).getUsername()));
+//        infoName.setText(String.valueOf(accList.get(0).getUsername()));
+//        accPosts.setText(String.valueOf(accList.get(0).getPosts()));
+//        accFollowers.setText(String.valueOf(accList.get(0).getFollowers()));
+//        accFollowing.setText(String.valueOf(accList.get(0).getFollowing()));
+
 
         // log out
         Button logOut = (Button) view.findViewById(R.id.logout_btn);
@@ -85,73 +95,29 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-//    //get number of followers
-//    private void getFollowersCount(){
-//        accFollowersNum = 0;
-//
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-//        Query query = reference.child(getString(R.string.dbname_followers))
-//                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//                    Log.d(TAG, "onDataChange: found follower:" + singleSnapshot.getValue());
-//                    accFollowersNum++;
-//                }
-//                accFollowers.setText(String.valueOf(accFollowersNum));
-//            }
-//        });
-//    }
-//
-//
-//    //get number of following
-//    private void getFollowingCount(){
-//        accFollowingNum = 0;
-//
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-//        Query query = reference.child(getString(R.string.dbname_following))
-//                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//                    Log.d(TAG, "onDataChange: found following user:" + singleSnapshot.getValue());
-//                    accFollowingNum++;
-//                }
-//                accFollowing.setText(String.valueOf(accFollowingNum));
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-//
-//    //get number of posts
-//    private void getPostsCount(){
-//        accPostsNum = 0;
-//
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-//        Query query = reference.child(getString(R.string.dbname_user_photos))
-//                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//                    Log.d(TAG, "onDataChange: found post:" + singleSnapshot.getValue());
-//                    accPostsNum++;
-//                }
-//                accPosts.setText(String.valueOf(accPostsNum));
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
+    //get account info
+    private void getAccountInfo(){
+        accList.clear();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference.child("account_info").orderByChild("user_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot singleUser: dataSnapshot.getChildren()){
+                    accList.add(singleUser.getValue(AccountInfo.class));
+                    Log.d(TAG, "acc info is: " + accList.get(0).toString());
+                    userName.setText(String.valueOf(accList.get(0).getUsername()));
+                    infoName.setText(String.valueOf(accList.get(0).getUsername()));
+                    accPosts.setText(String.valueOf(accList.get(0).getPosts()));
+                    accFollowers.setText(String.valueOf(accList.get(0).getFollowers()));
+                    accFollowing.setText(String.valueOf(accList.get(0).getFollowing()));
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
 
     /**
      * BottomNavigationView

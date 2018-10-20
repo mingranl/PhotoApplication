@@ -1,19 +1,25 @@
 package com.example.misaka.photoapplication.Model;
 
-public class AccountInfo {
+import java.io.Serializable;
+
+public class AccountInfo implements Serializable {
 
     private String user_id;
-    private String user_name;
+    private String username;
     private int posts;
     private int following;
     private int followers;
 
-    public AccountInfo(String id, String name, int posts, int following, int followers){
-        this.user_id = id;
-        this.user_name = name;
+    public AccountInfo(String user_id, String username, int posts, int following, int followers){
+        this.user_id = user_id;
+        this.username = username;
         this.posts = posts;
         this.following = following;
         this.followers = followers;
+    }
+
+    public AccountInfo(){
+
     }
 
     public String getUser_id() {
@@ -24,12 +30,12 @@ public class AccountInfo {
         this.user_id = user_id;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getPosts() {
@@ -56,4 +62,14 @@ public class AccountInfo {
         this.followers = followers;
     }
 
+    @Override
+    public String toString() {
+        return "AccountInfo{" +
+                "user_id='" + user_id + '\'' +
+                ", username='" + username + '\'' +
+                ", posts=" + posts +
+                ", following=" + following +
+                ", followers=" + followers +
+                '}';
+    }
 }

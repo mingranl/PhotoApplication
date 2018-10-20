@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.misaka.photoapplication.Home.HomeActivity;
 import com.example.misaka.photoapplication.Model.Comment;
 import com.example.misaka.photoapplication.Model.FeedItem;
 import com.example.misaka.photoapplication.Model.Like;
@@ -40,6 +41,7 @@ public class UserFeedAdapter extends ArrayAdapter<FeedItem>{
     private ArrayList<Comment> commentlist=null;
     private ArrayList<Like> likelist=null;
     private ViewHolder holder=null;
+    boolean loginUserLike=false;
 
     //firebase storage reference for img download
     private static final FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
@@ -88,17 +90,20 @@ public class UserFeedAdapter extends ArrayAdapter<FeedItem>{
 
         Log.d("UserFeedAdapter", "Description" + getItem(position).getDescription());
 
+        //set username
         holder.feed_username.setText(getItem(position).getUsername());
+        //set description
         holder.description.setText(getItem(position).getDescription());
 
+        //set image
         String imgPath=getItem(position).getImg();
-
         StorageReference photoRef=storageReference.child(imgPath);
         Glide.with(mcontext)
                 .using(new FirebaseImageLoader())
                 .load(photoRef)
                 .into(holder.feed_img);
 
+        //set comment
         String feedID=getItem(position).getFeed_id();
         Query query=dbReference.child("comments").orderByChild("feed_id").equalTo(feedID);
         query.addValueEventListener(new ValueEventListener() {
@@ -116,7 +121,49 @@ public class UserFeedAdapter extends ArrayAdapter<FeedItem>{
             }
         });
 
+        //set like button listener
+        Log.d("feed_like", "loginUserLike" + loginUserLike);
+
+        holder.feed_like.setImageResource(android.R.drawable.star_big_off);
+//        ImageButtonOnclick likeListener=new ImageButtonOnclick(position);
+//        holder.feed_like.setOnClickListener(likeListener);
+
+
+
+//        holder.feed_like.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(loginUserLike==false){
+//                    holder.feed_like.setImageResource(android.R.drawable.star_big_on);
+//                    loginUserLike=true;
+//                }else{
+//                    holder.feed_like.setImageResource(android.R.drawable.star_big_off);
+//                    loginUserLike=false;
+//                }
+//            }
+//        });
+
 
         return convertView;
+    }
+
+    class ImageButtonOnclick implements View.OnClickListener{
+
+        private int position;
+
+        public ImageButtonOnclick(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(loginUserLike==false){
+                holder.feed_like.setImageResource(android.R.drawable.star_big_on);
+                loginUserLike=true;
+            }else{
+                holder.feed_like.setImageResource(android.R.drawable.star_big_off);
+                loginUserLike=false;
+            }
+        }
     }
 }

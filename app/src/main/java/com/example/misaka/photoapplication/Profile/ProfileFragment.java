@@ -12,14 +12,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.misaka.photoapplication.Login.LoginActivity;
 import com.example.misaka.photoapplication.Model.AccountInfo;
+import com.example.misaka.photoapplication.Model.FeedItem;
+import com.example.misaka.photoapplication.Model.User;
 import com.example.misaka.photoapplication.R;
 import com.example.misaka.photoapplication.Util.NavigationBarActivate;
+import com.example.misaka.photoapplication.Util.ProfileGridAdapter;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -49,9 +53,16 @@ public class ProfileFragment extends Fragment {
 
     //result users list
     private List<AccountInfo> accList = null;
+    //user_feed list
+    private static List<FeedItem> feedList = null;
+
+    //user_id and username
+    private String user_id = null;
+    private String currentUserName = null;
 
     //widgets
     private TextView accPosts, accFollowers, accFollowing, userName, infoName, accDes, accEmail;
+    private GridView gridView;
     private ImageView accImg;
     private BottomNavigationViewEx bottomNavigationViewEx;
     private Context context;
@@ -77,6 +88,7 @@ public class ProfileFragment extends Fragment {
         accEmail = view.findViewById(R.id.display_email);
         accImg = view.findViewById(R.id.userProfilePhoto);
         bottomNavigationViewEx = view.findViewById(R.id.bottomNaviBar);
+        gridView = view.findViewById(R.id.profileGridView);
         context = getActivity();
         accList = new ArrayList<AccountInfo>();
 
@@ -85,6 +97,9 @@ public class ProfileFragment extends Fragment {
 
         // call method to get AccountInfo from firebase
         getAccountInfo();
+
+        // call method to setup GridView
+        setupGridView();
 
         // log out
         Button logOut = (Button) view.findViewById(R.id.logout_btn);
@@ -101,13 +116,15 @@ public class ProfileFragment extends Fragment {
     }
 
     //get account info
-    private void getAccountInfo(){
+    private void getAccountInfo() {
+        //acquire current user_id
+        user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         accList.clear();
         Query query = dbReference.child("account_info").orderByChild("user_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleUser: dataSnapshot.getChildren()){
+                for (DataSnapshot singleUser : dataSnapshot.getChildren()) {
                     accList.add(singleUser.getValue(AccountInfo.class));
                     Log.d(TAG, "acc info is: " + accList.get(0).toString());
                     userName.setText(String.valueOf(accList.get(0).getUsername()));
@@ -126,6 +143,38 @@ public class ProfileFragment extends Fragment {
                             .into(accImg);
                 }
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    //setup user posts view
+    private void setupGridView() {
+        //initialize feed list
+        feedList = new ArrayList<FeedItem>();
+
+        Query query = dbReference.child("userfeeds").orderByChild("feed_id");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: found userFeeds:" + ds.getValue(FeedItem.class).toString());
+                    feedList.add(ds.getValue(FeedItem.class));
+                }
+                //get feeds of current user
+                ArrayList<String> imgUrls = new ArrayList<String>();
+                Log.d(TAG, "current username is (in gridView query 2): " + currentUserName);
+                for (int i = 0; i < feedList.size(); i++) {
+                    if (feedList.get(i).getUsername().equals("misaka")) {
+                        imgUrls.add(feedList.get(i).getImg());
+                    }
+                }
+                Log.d(TAG, "image list is: " + imgUrls.toString());
+                gridView.setAdapter(new ProfileGridAdapter(context, R.layout.layout_profile_grid_item, imgUrls));
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -135,7 +184,7 @@ public class ProfileFragment extends Fragment {
     /**
      * BottomNavigationView
      */
-    private void setupBottomNavigationView(){
+    private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: Setting up BottomNavigationView");
         bottomNavigationViewEx.enableAnimation(false);
         bottomNavigationViewEx.setTextVisibility(false);

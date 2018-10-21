@@ -136,60 +136,66 @@ public class UserFeedAdapter extends ArrayAdapter<FeedItem>{
 
 
         //initialize like button
-        if(judgelike(getItem(position).getFeed_id())==false){
-            Log.d("judge like----->","currentUser: "+getCurrentUsername()+" feed_id: "+getItem(position).getFeed_id()+" like? "+ false+ " button off");
-            holder.feed_like.setImageResource(android.R.drawable.star_big_off);
-            holder.feed_like.setTag(position);
-        }else{
-            Log.d("judge like----->","currentUser: "+getCurrentUsername()+" feed_id: "+getItem(position).getFeed_id()+" like? "+ true+ " button on");
-            holder.feed_like.setImageResource(android.R.drawable.star_big_on);
-            holder.feed_like.setTag(position);
-        }
+//        if(judgelike(getItem(position).getFeed_id())==false){
+//            Log.d("judge like----->","currentUser: "+getCurrentUsername()+" feed_id: "+getItem(position).getFeed_id()+" like? "+ false+ " button off");
+//            holder.feed_like.setImageResource(android.R.drawable.star_big_off);
+//            holder.feed_like.setTag(position);
+//        }else{
+//            Log.d("judge like----->","currentUser: "+getCurrentUsername()+" feed_id: "+getItem(position).getFeed_id()+" like? "+ true+ " button on");
+//            holder.feed_like.setImageResource(android.R.drawable.star_big_on);
+//            holder.feed_like.setTag(position);
+//        }
 
+        if(getItem(position).isCurrent_like()==false){
+            holder.feed_like.setImageResource(android.R.drawable.star_big_off);
+        }else{
+            holder.feed_like.setImageResource(android.R.drawable.star_big_on);
+        }
+        holder.feed_like.setTag(position);
 
 
         holder.feed_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-//                if(getItem(position).isCurrent_like()==false){
-//                    holder.feed_like.setImageResource(android.R.drawable.star_big_on);
-//                    getItem(position).setCurrent_like(true);
-//                    dbReference.child("userfeeds").child(getItem(position).getFeed_id()).child("current_like").setValue(true);
-//                    dbReference.child("userfeeds").child(getItem(position).getFeed_id()).child("like_count").setValue(getItem(position).getLike_count()+1);
-//                    Log.d("like_onclick", "in " + getItem(position).isCurrent_like() +" position "+ position + "drawable "+holder.feed_like.getResources());
-//
-//                }else if(getItem(position).isCurrent_like()==true){
-//                    holder.feed_like.setImageResource(android.R.drawable.star_big_off);
-//                    getItem(position).setCurrent_like(false);
-//                    dbReference.child("userfeeds").child(getItem(position).getFeed_id()).child("current_like").setValue(false);
-//                    dbReference.child("userfeeds").child(getItem(position).getFeed_id()).child("like_count").setValue(getItem(position).getLike_count()-1);
-//                    Log.d("like_onclick", "in " + getItem(position).isCurrent_like() +" position "+ position + "drawable " +holder.feed_like.getResources());
-//
-//                }else{
-//                    Log.d("like_onclick", "in " + getItem(position).isCurrent_like() +" position "+ position + "drawable " +holder.feed_like.getResources());
-//                }
-
-                if(judgelike(getItem(position).getFeed_id())==false){
-
-                    Log.d("onclick---->","1. not like----->2.like--->button on"+" position "+position+" feed_id "+getItem(position).getFeed_id());
+                if(getItem(position).isCurrent_like()==false){
                     holder.feed_like.setImageResource(android.R.drawable.star_big_on);
-                    String like_id=UUID.randomUUID().toString();
-                    Like like=new Like(like_id,getItem(position).getFeed_id(),getCurrentUsername());
-                    dbReference.child("likes").child(like_id).setValue(like);
+                    getItem(position).setCurrent_like(true);
+                    dbReference.child("userfeeds").child(getItem(position).getFeed_id()).child("current_like").setValue(true);
                     dbReference.child("userfeeds").child(getItem(position).getFeed_id()).child("like_count").setValue(getItem(position).getLike_count()+1);
+                    Log.d("like_onclick", "in " + getItem(position).isCurrent_like() +" position "+ position + "drawable "+holder.feed_like.getResources());
 
-                }else if(judgelike(getItem(position).getFeed_id())==true){
-                    Log.d("onclick---->","1.like----->2.not like--->button off"+" position "+position+" feed_id "+getItem(position).getFeed_id());
+                }else if(getItem(position).isCurrent_like()==true){
                     holder.feed_like.setImageResource(android.R.drawable.star_big_off);
-                    Like like=getCurrentLike(getItem(position).getFeed_id());
-                    Log.d("getlike",getItem(position).getFeed_id());
-                    Log.d("currentLike",getCurrentLike(getItem(position).getFeed_id())+"");
-                    dbReference.child("likes").child(like.getLike_id()).setValue(null);
+                    getItem(position).setCurrent_like(false);
+                    dbReference.child("userfeeds").child(getItem(position).getFeed_id()).child("current_like").setValue(false);
                     dbReference.child("userfeeds").child(getItem(position).getFeed_id()).child("like_count").setValue(getItem(position).getLike_count()-1);
-                }else{
+                    Log.d("like_onclick", "in " + getItem(position).isCurrent_like() +" position "+ position + "drawable " +holder.feed_like.getResources());
 
+                }else{
+                    Log.d("like_onclick", "in " + getItem(position).isCurrent_like() +" position "+ position + "drawable " +holder.feed_like.getResources());
                 }
+
+//                if(judgelike(getItem(position).getFeed_id())==false){
+//
+//                    Log.d("onclick---->","1. not like----->2.like--->button on"+" position "+position+" feed_id "+getItem(position).getFeed_id());
+//                    holder.feed_like.setImageResource(android.R.drawable.star_big_on);
+//                    String like_id=UUID.randomUUID().toString();
+//                    Like like=new Like(like_id,getItem(position).getFeed_id(),getCurrentUsername());
+//                    dbReference.child("likes").child(like_id).setValue(like);
+//                    dbReference.child("userfeeds").child(getItem(position).getFeed_id()).child("like_count").setValue(getItem(position).getLike_count()+1);
+//
+//                }else if(judgelike(getItem(position).getFeed_id())==true){
+//                    Log.d("onclick---->","1.like----->2.not like--->button off"+" position "+position+" feed_id "+getItem(position).getFeed_id());
+//                    holder.feed_like.setImageResource(android.R.drawable.star_big_off);
+//                    Like like=getCurrentLike(getItem(position).getFeed_id());
+//                    Log.d("getlike",getItem(position).getFeed_id());
+//                    Log.d("currentLike",getCurrentLike(getItem(position).getFeed_id())+"");
+//                    dbReference.child("likes").child(like.getLike_id()).setValue(null);
+//                    dbReference.child("userfeeds").child(getItem(position).getFeed_id()).child("like_count").setValue(getItem(position).getLike_count()-1);
+//                }else{
+//
+//                }
             }
         });
 

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.bumptech.glide.util.Util;
+import com.example.misaka.photoapplication.Model.AccountInfo;
 import com.example.misaka.photoapplication.Model.User;
 import com.example.misaka.photoapplication.Profile.ProfileActivity;
 import com.example.misaka.photoapplication.R;
@@ -51,6 +54,7 @@ public class SearchUserActivity extends AppCompatActivity {
 
     //result users list
     private List<User> resultUsers=null;
+    private List<AccountInfo> accountlist=null;
 
     //adapter of result user list view
     private ResultUserAdapter resultUserAdapter=null;
@@ -66,6 +70,7 @@ public class SearchUserActivity extends AppCompatActivity {
         mListView=findViewById(R.id.searchUList);
 
         setupBottomNavigationView();
+        getUsersRank();
         searchTextListener();
     }
 
@@ -80,6 +85,11 @@ public class SearchUserActivity extends AppCompatActivity {
             //execute when click search button
             public boolean onQueryTextSubmit(String s) {
                 searchUsers(s);
+//                if(TextUtils.isEmpty(s)){
+//                    mListView.clearTextFilter();
+//                }else{
+//                    mListView.setFilterText(s);
+//                }
                 return false;
             }
 
@@ -87,6 +97,11 @@ public class SearchUserActivity extends AppCompatActivity {
             //execute when input change
             public boolean onQueryTextChange(String s) {
                 searchUsers(s);
+//                if(TextUtils.isEmpty(s)){
+//                    mListView.clearTextFilter();
+//                }else{
+//                    mListView.setFilterText(s);
+//                }
                 return false;
             }
         });
@@ -132,7 +147,44 @@ public class SearchUserActivity extends AppCompatActivity {
 
                 }
             });
+        }else{
+            getUsersRank();
         }
+    }
+
+    public void getUsersRank(){
+        //resultUsers.clear();
+        Query query=dbReference.child("account_info").orderByChild("followers");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot singleUser: dataSnapshot.getChildren()){
+                    AccountInfo accountInfo=singleUser.getValue(AccountInfo.class);
+                    resultUsers.add(new User(accountInfo.getUser_id(),accountInfo.getEmail(),accountInfo.getUsername()));
+                    mListView.setAdapter(new ResultUserAdapter(SearchUserActivity.this,R.layout.layout_user_item,resultUsers));
+
+                    mListView.setTextFilterEnabled(true);
+
+                    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                            // jump to user profile
+                            Intent intent =new Intent(SearchUserActivity.this, ProfileActivity.class);
+                            Bundle bundle=new Bundle();
+                            intent.putExtra("calledFromSearch","calling");
+                            bundle.putSerializable("intent_user", resultUsers.get(position));
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**

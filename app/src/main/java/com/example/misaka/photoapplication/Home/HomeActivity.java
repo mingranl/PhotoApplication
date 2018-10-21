@@ -1,29 +1,20 @@
 package com.example.misaka.photoapplication.Home;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.misaka.photoapplication.Login.LoginActivity;
-import com.example.misaka.photoapplication.Model.Comment;
 import com.example.misaka.photoapplication.Model.FeedItem;
-import com.example.misaka.photoapplication.Model.Like;
 import com.example.misaka.photoapplication.R;
 import com.example.misaka.photoapplication.Util.NavigationBarActivate;
-import com.example.misaka.photoapplication.Profile.ProfileActivity;
-import com.example.misaka.photoapplication.Search.SearchUserActivity;
 
 import com.example.misaka.photoapplication.Util.UserFeedAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +30,10 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Home Activity
+ * Process operations in home page
+ */
 public class HomeActivity extends AppCompatActivity {
 
     //used for log output
@@ -47,18 +41,8 @@ public class HomeActivity extends AppCompatActivity {
     //bottom navi bar label
     private static final int SWITCH_LABEL = 0;
 
-    //private static final int HOME_FRAGMENT = 1;
-    //private static final int RESULT_ADD_NEW_STORY = 7891;
-    //private final static int CAMERA_RQ = 6969;
-    //private static final int REQUEST_ADD_NEW_STORY = 8719;
-
     //home activity context
     private Context mContext = HomeActivity.this;
-
-    //widgets
-    //private ViewPager mViewPager;
-   // private FrameLayout mFrameLayout;
-    //private RelativeLayout mRelativeLayout;
 
     //user feed title
     private TextView mTextView=null;
@@ -90,7 +74,9 @@ public class HomeActivity extends AppCompatActivity {
         getUserFeeds();
     }
 
-    //get user feeds
+    /**
+     * get user feeds
+     */
     public void getUserFeeds(){
 
         feedList=new ArrayList<FeedItem>();
@@ -136,7 +122,10 @@ public class HomeActivity extends AppCompatActivity {
         menuItem.setChecked(true);
     }
 
-    // if user has signed in then redirect to home page
+    /**
+     * Update UI if is not signed in
+     * @param user
+     */
     private void updateUI(FirebaseUser user){
         if(user==null){
             Log.d(TAG, "onComplete: success.");

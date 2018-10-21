@@ -3,24 +3,20 @@ package com.example.misaka.photoapplication.Share;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.net.Uri;
 
 import com.example.misaka.photoapplication.Home.HomeActivity;
 import com.example.misaka.photoapplication.Model.User;
 import com.example.misaka.photoapplication.Profile.ProfileActivity;
-import com.example.misaka.photoapplication.Search.SearchUserActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,13 +34,15 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
-import java.io.File;
 
+/**
+ * ProcessActivity
+ * Process the file before uploading
+ */
 public class ProcessActivity extends AppCompatActivity {
 
     private static final String TAG = "ProcessActivity";
@@ -123,6 +121,9 @@ public class ProcessActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Upload photo to the Storage
+     */
     public void uploadNewPhoto(){
         Log.d(TAG, "uploadNewPhoto: attempting to uplaod new photo.");
 
@@ -207,6 +208,12 @@ public class ProcessActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Write relevant image info to database
+     * @param description
+     * @param imagePath
+     * @param username
+     */
     private void writeToDatabase(String description,String imagePath,String username){
         String feed_id = UUID.randomUUID().toString();
         myRef.child("userfeeds").child(feed_id).child("description").setValue(description);
@@ -217,6 +224,10 @@ public class ProcessActivity extends AppCompatActivity {
         myRef.child("userfeeds").child(feed_id).child("current_like").setValue(false);
     }
 
+    /**
+     * Redirect to caller activity
+     * @param context
+     */
     private void redirect(String context){
         switch (context){
             case ShareActivity.HOME_ACTIVITY:

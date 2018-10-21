@@ -23,6 +23,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.example.misaka.photoapplication.R;
 import com.example.misaka.photoapplication.Home.HomeActivity;
 
+/**
+ * LoginActivity
+ * Process Login
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
@@ -65,6 +69,9 @@ public class LoginActivity extends AppCompatActivity {
         updateUI(currentUser);
     }
 
+    /**
+     * initialize view components
+     */
     private  void init(){
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +100,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Check if the input is null
+     * @param string
+     */
     private boolean isStringNull(String string){
         Log.d(TAG, "isStringNull: checking string if null.");
 
@@ -104,6 +115,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sign in with email and password
+     * @param email
+     * @param password
+     */
     private void signIn(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -128,6 +144,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Update UI if is not signed in
+     * @param user
+     */
     // if user has signed in then redirect to home page
     private void updateUI(FirebaseUser user){
         if(user!=null){

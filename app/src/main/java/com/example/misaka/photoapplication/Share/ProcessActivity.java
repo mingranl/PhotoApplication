@@ -3,6 +3,7 @@ package com.example.misaka.photoapplication.Share;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -165,6 +166,15 @@ public class ProcessActivity extends AppCompatActivity {
             Log.d(TAG, "uri: " + uri);
             UploadTask uploadTask = imgs.putFile(uri);
 
+//            final BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inJustDecodeBounds = true;//只解析图片边沿，获取宽高
+//            BitmapFactory.decodeFile(uri, options);
+//            // 计算缩放比
+//            options.inSampleSize = calculateInSampleSize(options, 480, 800);
+//            // 完整解析图片返回bitmap
+//            options.inJustDecodeBounds = false;
+//            return BitmapFactory.decodeFile(filePath, options);
+
             // Register observers to listen for when the download is done or if it fails
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -204,6 +214,7 @@ public class ProcessActivity extends AppCompatActivity {
         myRef.child("userfeeds").child(feed_id).child("username").setValue(username);
         myRef.child("userfeeds").child(feed_id).child("like_count").setValue(0);
         myRef.child("userfeeds").child(feed_id).child("img").setValue(imagePath);
+        myRef.child("userfeeds").child(feed_id).child("current_like").setValue(false);
     }
 
     private void redirect(String context){

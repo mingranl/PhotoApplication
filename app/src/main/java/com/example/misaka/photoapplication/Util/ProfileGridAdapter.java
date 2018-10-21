@@ -26,7 +26,7 @@ public class ProfileGridAdapter extends ArrayAdapter<String> {
 
     private Context context;
     private int resource_id;
-    private ArrayList<String> imgUrl = new ArrayList<String>();
+    private ArrayList<String> imgUrl;
 
     //firebase storage reference for img download
     private static final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
@@ -63,6 +63,7 @@ public class ProfileGridAdapter extends ArrayAdapter<String> {
         }
 
         String url = imgUrl.get(position);
+        Log.d(TAG, "url: " + url);
         StorageReference photoRef = storageReference.child(url);
         Glide.with(context)
                 .using(new FirebaseImageLoader())

@@ -156,9 +156,9 @@ public class ViewProfileFragment extends Fragment {
                     if (ds.getValue(FeedItem.class).getUsername().equals(user.getUsername())) {
                         userPost++;
                         imgUrls.add(ds.getValue(FeedItem.class).getImg());
-                        Log.d(TAG, "image list is: " + imgUrls.toString());
-                        gridView.setAdapter(new ProfileGridAdapter(context, R.layout.layout_profile_grid_item, imgUrls));
                     }
+                    Log.d(TAG, "image list is: " + imgUrls.toString());
+                    gridView.setAdapter(new ProfileGridAdapter(context, R.layout.layout_profile_grid_item, imgUrls));
                     vPosts.setText(String.valueOf(userPost));
                 }
             }

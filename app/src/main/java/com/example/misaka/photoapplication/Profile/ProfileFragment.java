@@ -177,14 +177,15 @@ public class ProfileFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                imgUrls.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Log.d(TAG, "onDataChange: found userFeeds:" + ds.getValue(FeedItem.class).toString());
                     if(ds.getValue(FeedItem.class).getUsername().equals(("misaka"))){
                         userPost++;
                         imgUrls.add(ds.getValue(FeedItem.class).getImg());
-                        Log.d(TAG, "image list is: " + imgUrls.toString());
-                        gridView.setAdapter(new ProfileGridAdapter(context, R.layout.layout_profile_grid_item, imgUrls));
                     }
+                    Log.d(TAG, "image list is: " + imgUrls.toString());
+                    gridView.setAdapter(new ProfileGridAdapter(context, R.layout.layout_profile_grid_item, imgUrls));
                 }
                 accPosts.setText(String.valueOf(userPost));
             }

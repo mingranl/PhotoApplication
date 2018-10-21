@@ -6,7 +6,7 @@
 
     <ImageView
         android:id="@+id/profile_post_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="100dp"
+        android:layout_height="80dp"/>
 
 </android.support.constraint.ConstraintLayout>

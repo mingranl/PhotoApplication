@@ -10,14 +10,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.misaka.photoapplication.Model.AccountInfo;
+import com.example.misaka.photoapplication.Model.FeedItem;
 import com.example.misaka.photoapplication.Model.User;
 import com.example.misaka.photoapplication.R;
 import com.example.misaka.photoapplication.Util.NavigationBarActivate;
+import com.example.misaka.photoapplication.Util.ProfileGridAdapter;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -48,17 +51,21 @@ public class ViewProfileFragment extends Fragment {
     private static final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private static final StorageReference storageReference = firebaseStorage.getReference();
 
-    //result users list
+    //result users account list
     private List<AccountInfo> accList = null;
+    //image url of current user
+    private ArrayList<String> imgUrls = null;
 
     //widgets
     private TextView vPosts, vFollowers, vFollowing, vUserName, vInfoName, vDes, vEmail;
     private ImageView vImg;
+    private GridView gridView;
     private BottomNavigationViewEx bottomNavigationViewEx;
     private Context context;
 
     //variables
     private User user;
+    private int userPost = 0;
 
     public ViewProfileFragment() {
         // Required empty public constructor
@@ -82,13 +89,16 @@ public class ViewProfileFragment extends Fragment {
         vDes = view.findViewById(R.id.view_description);
         vEmail = view.findViewById(R.id.display_view_email);
         vImg = view.findViewById(R.id.userViewProfilePhoto);
+        gridView = view.findViewById(R.id.gridSearchView);
         bottomNavigationViewEx = view.findViewById(R.id.bottomNaviBar);
         context = getActivity();
         accList = new ArrayList<AccountInfo>();
 
         user = getUserFromBundle();
-        initWidgets();
 
+        // call method to initialize widgets
+        initWidgets();
+        setupPostAndGridView();
         setupBottomNavigationView();
 
         return view;
@@ -101,6 +111,9 @@ public class ViewProfileFragment extends Fragment {
     }
 
     private void initWidgets(){
+        //initialize account info list
+        accList = new ArrayList<>();
+
         Query query = dbReference.child("account_info").orderByChild("user_id").equalTo(user.getUser_id());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -110,7 +123,6 @@ public class ViewProfileFragment extends Fragment {
                     Log.d(TAG, "acc info is: " + accList.get(0).toString());
                     vUserName.setText(String.valueOf(accList.get(0).getUsername()));
                     vInfoName.setText(String.valueOf(accList.get(0).getUsername()));
-                    vPosts.setText(String.valueOf(accList.get(0).getPosts()));
                     vFollowers.setText(String.valueOf(accList.get(0).getFollowers()));
                     vFollowing.setText(String.valueOf(accList.get(0).getFollowing()));
                     vDes.setText(String.valueOf(accList.get(0).getDescription()));
@@ -124,6 +136,33 @@ public class ViewProfileFragment extends Fragment {
                             .into(vImg);
                 }
             }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    //setup user posts view
+    private void setupPostAndGridView() {
+        //initialize
+        imgUrls = new ArrayList<>();
+        userPost = 0;
+        Query query = dbReference.child("userfeeds").orderByChild("feed_id");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: found userFeeds:" + ds.getValue(FeedItem.class).toString());
+                    if (ds.getValue(FeedItem.class).getUsername().equals(user.getUsername())) {
+                        userPost++;
+                        imgUrls.add(ds.getValue(FeedItem.class).getImg());
+                        Log.d(TAG, "image list is: " + imgUrls.toString());
+                        gridView.setAdapter(new ProfileGridAdapter(context, R.layout.layout_profile_grid_item, imgUrls));
+                    }
+                    vPosts.setText(String.valueOf(userPost));
+                }
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }

@@ -51,14 +51,15 @@ public class ProfileFragment extends Fragment {
     private static final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private static final StorageReference storageReference = firebaseStorage.getReference();
 
-    //result users list
+    //result users account list
     private List<AccountInfo> accList = null;
-    //user_feed list
-    private static List<FeedItem> feedList = null;
+    //username list
+    private ArrayList<String> currentUserName = null;
+    //image url of current user
+    private ArrayList<String> imgUrls = null;
 
     //user_id and username
     private String user_id = null;
-    private String currentUserName = null;
 
     //widgets
     private TextView accPosts, accFollowers, accFollowing, userName, infoName, accDes, accEmail;
@@ -66,6 +67,9 @@ public class ProfileFragment extends Fragment {
     private ImageView accImg;
     private BottomNavigationViewEx bottomNavigationViewEx;
     private Context context;
+
+    //vars
+    private int userPost = 0;
 
     //bottom navi bar label
     private static final int SWITCH_LABEL = 4;
@@ -90,19 +94,39 @@ public class ProfileFragment extends Fragment {
         bottomNavigationViewEx = view.findViewById(R.id.bottomNaviBar);
         gridView = view.findViewById(R.id.profileGridView);
         context = getActivity();
-        accList = new ArrayList<AccountInfo>();
+
+        //initialize lists
+        accList = new ArrayList<>();
+        currentUserName = new ArrayList<>();
+        imgUrls = new ArrayList<>();
+
+        //acquire current user_id
+        user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        //acquire current username and load into list
+        Query query_uName = dbReference.child("account_info").orderByChild("user_id").equalTo(user_id);
+        query_uName.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleUser : dataSnapshot.getChildren()) {
+                    currentUserName.add(singleUser.getValue(AccountInfo.class).getUsername());
+                    Log.d(TAG, "current username is: " + currentUserName.get(0).toString());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
         // call method to setup BottomNavigationBar
         setupBottomNavigationView();
 
-        // call method to get AccountInfo from firebase
+        // call method to initialize widgets
         getAccountInfo();
-
-        // call method to setup GridView
-        setupGridView();
+        setPostAndGrid();
 
         // log out
-        Button logOut = (Button) view.findViewById(R.id.logout_btn);
+        Button logOut = view.findViewById(R.id.logout_btn);
         logOut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mAuth = FirebaseAuth.getInstance();
@@ -117,10 +141,8 @@ public class ProfileFragment extends Fragment {
 
     //get account info
     private void getAccountInfo() {
-        //acquire current user_id
-        user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         accList.clear();
-        Query query = dbReference.child("account_info").orderByChild("user_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        Query query = dbReference.child("account_info").orderByChild("user_id").equalTo(user_id);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -129,7 +151,6 @@ public class ProfileFragment extends Fragment {
                     Log.d(TAG, "acc info is: " + accList.get(0).toString());
                     userName.setText(String.valueOf(accList.get(0).getUsername()));
                     infoName.setText(String.valueOf(accList.get(0).getUsername()));
-                    accPosts.setText(String.valueOf(accList.get(0).getPosts()));
                     accFollowers.setText(String.valueOf(accList.get(0).getFollowers()));
                     accFollowing.setText(String.valueOf(accList.get(0).getFollowing()));
                     accDes.setText(String.valueOf(accList.get(0).getDescription()));
@@ -150,29 +171,22 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    //setup user posts view
-    private void setupGridView() {
-        //initialize feed list
-        feedList = new ArrayList<FeedItem>();
-
+    private void setPostAndGrid(){
+        userPost = 0;
         Query query = dbReference.child("userfeeds").orderByChild("feed_id");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Log.d(TAG, "onDataChange: found userFeeds:" + ds.getValue(FeedItem.class).toString());
-                    feedList.add(ds.getValue(FeedItem.class));
-                }
-                //get feeds of current user
-                ArrayList<String> imgUrls = new ArrayList<String>();
-                Log.d(TAG, "current username is (in gridView query 2): " + currentUserName);
-                for (int i = 0; i < feedList.size(); i++) {
-                    if (feedList.get(i).getUsername().equals("misaka")) {
-                        imgUrls.add(feedList.get(i).getImg());
+                    if(ds.getValue(FeedItem.class).getUsername().equals((currentUserName.get(0).toString()))){
+                        userPost++;
+                        imgUrls.add(ds.getValue(FeedItem.class).getImg());
+                        Log.d(TAG, "image list is: " + imgUrls.toString());
+                        gridView.setAdapter(new ProfileGridAdapter(context, R.layout.layout_profile_grid_item, imgUrls));
                     }
                 }
-                Log.d(TAG, "image list is: " + imgUrls.toString());
-                gridView.setAdapter(new ProfileGridAdapter(context, R.layout.layout_profile_grid_item, imgUrls));
+                accPosts.setText(String.valueOf(userPost));
             }
 
             @Override

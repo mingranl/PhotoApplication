@@ -179,7 +179,7 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Log.d(TAG, "onDataChange: found userFeeds:" + ds.getValue(FeedItem.class).toString());
-                    if(ds.getValue(FeedItem.class).getUsername().equals((currentUserName.get(0).toString()))){
+                    if(ds.getValue(FeedItem.class).getUsername().equals(("misaka"))){
                         userPost++;
                         imgUrls.add(ds.getValue(FeedItem.class).getImg());
                         Log.d(TAG, "image list is: " + imgUrls.toString());

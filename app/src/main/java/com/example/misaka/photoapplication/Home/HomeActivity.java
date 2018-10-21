@@ -99,6 +99,7 @@ public class HomeActivity extends AppCompatActivity {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                feedList.clear();
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     Log.d(TAG, "onDataChange: found userFeeds:" + ds.getValue(FeedItem.class).toString());
 

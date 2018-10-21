@@ -6,13 +6,15 @@ public class FeedItem {
     private String img;
     private String description;
     private int like_count;
+    boolean current_like=false;
 
-    public FeedItem(String feed_id, String username, String img, String description, int like_count) {
+    public FeedItem(String feed_id, String username, String img, String description, int like_count, boolean current_like) {
         this.feed_id = feed_id;
         this.username = username;
         this.img = img;
         this.description = description;
         this.like_count = like_count;
+        this.current_like=current_like;
     }
 
     public FeedItem() {
@@ -58,6 +60,14 @@ public class FeedItem {
         this.like_count = like_count;
     }
 
+    public boolean isCurrent_like() {
+        return current_like;
+    }
+
+    public void setCurrent_like(boolean currentUserlike) {
+        this.current_like = currentUserlike;
+    }
+
     @Override
     public String toString() {
         return "FeedItem{" +
@@ -66,6 +76,7 @@ public class FeedItem {
                 ", img='" + img + '\'' +
                 ", description='" + description + '\'' +
                 ", like_count=" + like_count +
+                ", current_like=" + current_like +
                 '}';
     }
 }

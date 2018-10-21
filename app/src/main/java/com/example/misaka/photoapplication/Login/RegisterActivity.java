@@ -29,10 +29,15 @@ import com.example.misaka.photoapplication.Model.User;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * LoginActivity
+ * Process Login
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 
+    //view
     private Context mContext;
     private String email, username, password;
     private EditText mEmail, mPassword, mUsername;
@@ -80,6 +85,9 @@ public class RegisterActivity extends AppCompatActivity {
         updateUI(currentUser);
     }
 
+    /**
+     * Initialize view components
+     */
     private void init(){
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +115,12 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Check if info inputs are null
+     * @param email
+     * @param username
+     * @param password
+     */
     private boolean checkInputs(String email, String username, String password){
         Log.d(TAG, "checkInputs: checking inputs for null values.");
         if(email.equals("") || username.equals("") || password.equals("")){
@@ -116,8 +130,13 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
-    // check if the username exists
-    // if yes, add random postfix to it then write all info to databse
+    /**
+     * Check if username exists in server
+     * If yes, add random postfix to username
+     * @param userID
+     * @param email
+     * @param username
+     */
     private void checkUsername(final String userID, final String email, final String username){
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -151,6 +170,11 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Register with email and password
+     * @param email
+     * @param password
+     */
     private void register(String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -174,14 +198,22 @@ public class RegisterActivity extends AppCompatActivity {
                 });
     }
 
-    // write new user to users
+    /**
+     * Write user info to databsae
+     * @param userId
+     * @param name
+     * @param email
+     */
     private void writeNewUser(String userId, String name, String email) {
         User user = new User(userId, email, name);
 
         myRef.child("users").child(userId).setValue(user);
     }
 
-    // get current user to successive actions
+    /**
+     * Start to write user info
+     * @param user
+     */
     private void writeData(FirebaseUser user){
         if(user!=null){
             Log.d(TAG, "Sign up: success.");
@@ -190,7 +222,10 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    // if user has signed in then redirect to home page
+    /**
+     * Update UI if is not signed in
+     * @param user
+     */
     private void updateUI(FirebaseUser user){
         if(user!=null){
             Log.d(TAG, "onComplete: success.");

@@ -3,8 +3,6 @@ package com.example.misaka.photoapplication.Share;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -14,25 +12,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.content.Context;
 
-import com.example.misaka.photoapplication.Home.HomeActivity;
-import com.example.misaka.photoapplication.Profile.ProfileActivity;
 import com.example.misaka.photoapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import android.net.Uri;
-import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * CameraFragment
+ * Display share layout and process file
+ */
 public class CameraFragment extends Fragment {
     private static final String TAG = "PhotoFragment";
 
@@ -46,7 +42,6 @@ public class CameraFragment extends Fragment {
     private Button btnFileChoose;
     private ImageView cancel;
 
-
     //storage path for the photo
     private String mTempPhotoPath;
     //image's uri path
@@ -57,8 +52,6 @@ public class CameraFragment extends Fragment {
     private FirebaseUser user;
 
     private static final String CAMERA_PERMISSION =  Manifest.permission.CAMERA;
-
-
 
     @Nullable
     @Override
@@ -99,6 +92,9 @@ public class CameraFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Call the camera to take photo
+     */
     private void takePhoto(){
 
         String authorities = "com.example.misaka.photoapplication";
@@ -141,6 +137,9 @@ public class CameraFragment extends Fragment {
         }
     }
 
+    /**
+     * Call the gallery to choose file
+     */
     private void choosePhoto(){
         Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
         // add postfix to "image/" to limit upload image type

@@ -15,20 +15,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.misaka.photoapplication.Home.HomeActivity;
-import com.example.misaka.photoapplication.Login.LoginActivity;
 import com.example.misaka.photoapplication.Profile.ProfileActivity;
 import com.example.misaka.photoapplication.R;
 import com.example.misaka.photoapplication.Search.SearchUserActivity;
-import com.example.misaka.photoapplication.Util.NavigationBarActivate;
 
-import com.blankj.utilcode.constant.PermissionConstants;
-import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.PermissionUtils;
-import com.blankj.utilcode.util.ScreenUtils;
-import com.blankj.utilcode.util.SpanUtils;
-
-import java.util.List;
-
+/**
+ * ShareActivity
+ * Implement share relevant methods
+ */
 public class ShareActivity extends AppCompatActivity {
 
     private static final String TAG = "ShareActivity";
@@ -71,7 +65,6 @@ public class ShareActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         if(checkPermissions(PERMISSIONS)){
-//            setupViewPager();
             Log.d(TAG, "onStart: Start.");
         }
     }
@@ -81,7 +74,6 @@ public class ShareActivity extends AppCompatActivity {
      */
     private void setupViewPager(){
         SectionsPagerAdapter adapter =  new SectionsPagerAdapter(getSupportFragmentManager());
-//        adapter.addFragment(new GalleryFragment());
         adapter.addFragment(new CameraFragment());
 
         mViewPager = (ViewPager) findViewById(R.id.share_viewpager_container);
@@ -90,7 +82,6 @@ public class ShareActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.share_tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-//        tabLayout.getTabAt(0).setText(getString(R.string.gallery));
         tabLayout.getTabAt(0).setText(getString(R.string.photo));
 
     }
@@ -156,13 +147,6 @@ public class ShareActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Overwrite permission callback method
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     * @return Boolean
-     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -183,6 +167,7 @@ public class ShareActivity extends AppCompatActivity {
 
     /**
      * Back to the caller activity if permissions be denied
+     * @param result
      */
     private void afterVerification(boolean result){
         if(!result){
@@ -193,6 +178,9 @@ public class ShareActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Redirect to caller activity
+     */
     private void redirect(){
         String caller = getIntent().getStringExtra("caller");
         switch (caller){

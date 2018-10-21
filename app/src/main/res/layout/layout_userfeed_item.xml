@@ -45,7 +45,7 @@
             android:layout_height="19dp"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/feed_description"
-            android:layout_marginEnd="69dp"
+            android:layout_marginEnd="92dp"
             android:layout_marginTop="-117dp"
             app:srcCompat="@android:drawable/ic_menu_edit" />
 
@@ -53,9 +53,10 @@
             android:id="@+id/feed_like"
             android:layout_width="22dp"
             android:layout_height="19dp"
+            android:layout_alignParentEnd="true"
             android:layout_below="@+id/feed_description"
+            android:layout_marginEnd="63dp"
             android:layout_marginTop="-117dp"
-            android:layout_toEndOf="@+id/feed_img"
             app:srcCompat="@android:drawable/star_big_off" />
 
         <ListView
@@ -84,6 +85,15 @@
             android:layout_alignStart="@+id/textView"
             android:layout_marginBottom="85dp"
             android:text="#Comments#" />
+
+        <TextView
+            android:id="@+id/feed_likecount"
+            android:layout_width="27dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/feed_description"
+            android:layout_marginTop="-117dp"
+            android:layout_toEndOf="@+id/feed_img"
+            android:text="0" />
 
     </RelativeLayout>
 
